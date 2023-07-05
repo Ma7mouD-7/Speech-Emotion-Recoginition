@@ -46,10 +46,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import me.bastanfar.semicirclearcprogressbar.SemiCircleArcProgressBar;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -111,15 +113,15 @@ public class MainActivity extends AppCompatActivity {
             if(recPath == null && recUri == null)
                 Toast.makeText(this, "Please Record or Choose File First", Toast.LENGTH_LONG).show();
             else{
-//                getPrediction();
-                AlertDialog dialog = showProgressbar(this, "Loading");
-                dialog.show();
-                new Handler().postDelayed(() -> {
-                    dialog.dismiss();
-                    Intent intent = new Intent(MainActivity.this,ResultActivity.class);
-                    intent.putExtra("RESULT_EMOTION","Angry");
-                    startActivity(intent);
-                },7500);
+                getPrediction();
+//                AlertDialog dialog = showProgressbar(this, "Loading");
+//                dialog.show();
+//                new Handler().postDelayed(() -> {
+//                    dialog.dismiss();
+//                    Intent intent = new Intent(MainActivity.this,ResultActivity.class);
+//                    intent.putExtra("RESULT_EMOTION","Angry");
+//                    startActivity(intent);
+//                },7500);
             }
         });
     }
@@ -468,8 +470,13 @@ public class MainActivity extends AppCompatActivity {
 
 
             RequestBody req = RequestBody.create(MediaType.parse("audio/mpeg"),file);
+            OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                    .connectTimeout(120, TimeUnit.SECONDS)
+                    .readTimeout(120, TimeUnit.SECONDS)
+                    .writeTimeout(120, TimeUnit.SECONDS)
+                    .build();
             MultipartBody.Part audio = MultipartBody.Part.createFormData("file", file.getName(), req);
-            Retrofit retrofit = new Retrofit.Builder().baseUrl("https://mohamed41-medo.hf.space").addConverterFactory(GsonConverterFactory.create()).build();
+            Retrofit retrofit = new Retrofit.Builder().baseUrl("https://mohamed41-medo.hf.space").client(okHttpClient).addConverterFactory(GsonConverterFactory.create()).build();
             ApiService apiService = retrofit.create(ApiService.class);
             Call<Response> call = apiService.uploadAudio(audio);
             call.enqueue(new Callback<Response>() {
@@ -478,10 +485,14 @@ public class MainActivity extends AppCompatActivity {
                     if (response.isSuccessful()) {
                         // Handle success
                         Response resp = response.body();
-                        Log.d("from Testing", resp.getPrediction().toString());
+                        Log.d("from Testing", resp.getPrediction());
                     } else {
-                        // Handle error
-                        Log.d("from Testing", "onResponse: error" + response.body());
+                        Log.d("from Testing", "onResponse: code " + response.code());
+                        try {
+                            Log.d("from Testing", "onResponse: error " + response.body() + " "+response.errorBody().string());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
 
