@@ -1,0 +1,28 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Platform.Theme.Neumorphism" parent="Theme.Neumorph.DayNight.NoActionBar">
+        <item name="android:statusBarColor">@color/status_bar_scrim</item>
+        <item name="android:navigationBarColor">@color/nav_bar_scrim</item>
+    </style>
+    <style name="Theme.SpeechEmotionRecognition" parent="Platform.Theme.Neumorphism">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/color_primary</item>
+        <item name="colorPrimaryVariant">@color/color_primary_dark</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/color_secondary</item>
+        <item name="colorSecondaryVariant">@color/color_secondary_shade</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Customize your theme here. -->
+        <item name="fontFamily">@font/ubuntu</item>
+    </style>
+    <style name="round5">
+        <item name="neumorph_cornerFamily">rounded</item>
+        <item name="neumorph_cornerSize">5dp</item>
+
+    </style>
+    <style name="round">
+        <item name="neumorph_cornerFamily">rounded</item>
+        <item name="neumorph_cornerSize">1000dp</item>
+    </style>
+</resources>

@@ -1,0 +1,13 @@
+
+F
+java:S1659")Declare "emotionDark" on a separate line.(ÊÉ§8æˆ” ‘1
+l
+java:S1450"VRemove the "emotion" field and declare it as a local variable in the relevant methods.(¦íÅ±
+w
+java:S1450"ZRemove the "emotionDark" field and declare it as a local variable in the relevant methods.(ÊÉ§8çˆ” ‘1
+x
+java:S1450"[Remove the "emotionImage" field and declare it as a local variable in the relevant methods.(åĞŞ8»²• ‘1
+x
+java:S1450"[Remove the "emotionLight" field and declare it as a local variable in the relevant methods.(ÊÉ§8èˆ” ‘1
+{
+java:S1450"^Remove the "emotionTextView" field and declare it as a local variable in the relevant methods.(ï€Â8ïê” ‘1

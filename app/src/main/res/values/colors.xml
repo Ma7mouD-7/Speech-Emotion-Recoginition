@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+<!--    <color name="color_primary">#03396c</color>-->
+<!--    <color name="color_primary_dark">#03254E</color>-->
+<!--    <color name="color_primary_light">#B72165A7</color>-->
+
+    <color name="color_primary">#011f4b</color>
+    <color name="color_primary_dark">#01132F</color>
+    <color name="color_primary_light">#B8023075</color>
+
+    <color name="color_secondary">#FF9F4F</color>
+    <color name="color_secondary_shade">#FF7400</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="color_accent">#000000</color>
+    <color name="background">#F0F0F0</color>
+    <color name="font">#1F1D1D</color>
+    <color name="shadowColorDark">#68B4B4B4</color>
+    <color name="shadowColorLight">#D8FFFFFF</color>
+
+    <color name="status_bar_scrim">@color/background</color>
+    <bool name="use_light_status_bar">true</bool>
+
+    <color name="nav_bar_scrim">@color/background</color>
+    <bool name="use_light_nav_bar">false</bool>
+</resources>

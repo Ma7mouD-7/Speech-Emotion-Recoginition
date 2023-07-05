@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="color_primary">#1E5077</color>
+    <color name="color_primary_dark">#7011334D</color>
+    <color name="color_primary_light">#80387AAC</color>
+    <color name="color_secondary">#FF9F4F</color>
+    <color name="color_secondary_shade">#FF7400</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="color_accent">#FFFFFF</color>
+    <color name="background">#222222</color>
+    <color name="font">#FBFBFB</color>
+    <color name="shadowColorDark">#40000000</color>
+    <color name="shadowColorLight">#1AFFFFFF</color>
+
+    <color name="status_bar_scrim">@color/background</color>
+    <bool name="use_light_status_bar">true</bool>
+    <color name="nav_bar_scrim">@color/background</color>
+    <bool name="use_light_nav_bar">false</bool>
+</resources>
