@@ -1,12 +1,5 @@
 package com.ma7moud27.speechemotionrecognition;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -30,6 +23,13 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.airbnb.lottie.LottieAnimationView;
 import com.ma7moud27.speechemotionrecognition.animations.Animation;
 import com.ma7moud27.speechemotionrecognition.network.ApiService;
@@ -37,7 +37,6 @@ import com.ma7moud27.speechemotionrecognition.network.Response;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -101,31 +100,25 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         initComponents();
-        if(!checkPermissions(new ArrayList<>(Arrays.asList(android.Manifest.permission.RECORD_AUDIO,android.Manifest.permission.READ_MEDIA_AUDIO)))) grantPermission();
+        if (!checkPermissions(new ArrayList<>(Arrays.asList(android.Manifest.permission.RECORD_AUDIO, android.Manifest.permission.READ_MEDIA_AUDIO))))
+            grantPermission();
 
-        recButton.setOnClickListener(v-> handleRecording());
+        recButton.setOnClickListener(v -> handleRecording());
 
         playStopButton.setOnClickListener(v -> handlePlaying());
 
         folderButton.setOnClickListener(v -> getFile());
 
         submitButton.setOnClickListener(v -> {
-            if(recPath == null && recUri == null)
+            if (recPath == null && recUri == null)
                 Toast.makeText(this, "Please Record or Choose File First", Toast.LENGTH_LONG).show();
-            else{
+            else {
                 getPrediction();
-//                AlertDialog dialog = showProgressbar(this, "Loading");
-//                dialog.show();
-//                new Handler().postDelayed(() -> {
-//                    dialog.dismiss();
-//                    Intent intent = new Intent(MainActivity.this,ResultActivity.class);
-//                    intent.putExtra("RESULT_EMOTION","Angry");
-//                    startActivity(intent);
-//                },7500);
             }
         });
     }
-    public static AlertDialog showProgressbar(Context context, String text){
+
+    public static AlertDialog showProgressbar(Context context, String text) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View customLayout = inflater.inflate(R.layout.progress_bar_layout, null);
         TextView titleTextView = customLayout.findViewById(R.id.loading_dialog_title);
@@ -163,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
         micAnimation = findViewById(R.id.mic_animation);
 
         playStopAnimation = findViewById(R.id.play_stop_animation);
-        playStopAnimation.setMinAndMaxFrame(30,60);
+        playStopAnimation.setMinAndMaxFrame(30, 60);
 
         mResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -183,42 +176,40 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void toggleStopwatch(boolean isEnable) {
-        if(isEnable){
+        if (isEnable) {
             startTime = System.currentTimeMillis();
             mStopwatchEvent = new Runnable() {
                 @Override
                 public void run() {
-                    long elapsedTime = (System.currentTimeMillis() - startTime)/1000;
+                    long elapsedTime = (System.currentTimeMillis() - startTime) / 1000;
                     long minutes = elapsedTime / 60;
                     long seconds = elapsedTime % 60;
-                    updateTimer(minutes,seconds);
-                    mStopwatch.postDelayed(this,1000);
+                    updateTimer(minutes, seconds);
+                    mStopwatch.postDelayed(this, 1000);
                 }
             };
             mStopwatch.post(mStopwatchEvent);
-        }
-        else mStopwatch.removeCallbacks(mStopwatchEvent);
+        } else mStopwatch.removeCallbacks(mStopwatchEvent);
 
 
     }
 
-    private boolean startRecording(){
-        if(checkPermissions(new ArrayList<>(Arrays.asList(android.Manifest.permission.RECORD_AUDIO,android.Manifest.permission.READ_MEDIA_AUDIO)))){
+    private boolean startRecording() {
+        if (checkPermissions(new ArrayList<>(Arrays.asList(android.Manifest.permission.RECORD_AUDIO, android.Manifest.permission.READ_MEDIA_AUDIO)))) {
             String curTime = new SimpleDateFormat("yyyy_MM_dd HH_mm_ss", Locale.getDefault()).format(new Date());
             ContextWrapper contextWrapper = new ContextWrapper(getApplicationContext());
             File dir = contextWrapper.getExternalFilesDir(Environment.DIRECTORY_MUSIC);
-            File file = new File(dir,"REC_"+curTime+"_SER.wav");
+            File file = new File(dir, "REC_" + curTime + "_SER.mp3");
             recPath = file.getPath();
             recName = file.getName();
             mMediaRecorder = new MediaRecorder();
-            mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+            mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
             mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-            mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
-            mMediaRecorder.setAudioSamplingRate(48000);
+            mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_WB);
+            mMediaRecorder.setMaxDuration(3599000);
+            mMediaRecorder.setMaxFileSize(52428800);
             mMediaRecorder.setAudioChannels(1);
-            mMediaRecorder.setAudioEncodingBitRate(768000);
-
-
+            mMediaRecorder.setAudioEncodingBitRate(128000);
 
 
             mMediaRecorder.setOutputFile(recPath);
@@ -230,15 +221,14 @@ public class MainActivity extends AppCompatActivity {
                 toggleStopwatch(true);
                 filename.setText(R.string.recording);
                 filename.setTextSize(20);
-                filename.setTextColor(getResources().getColor( R.color.color_secondary_shade) );
+                filename.setTextColor(getResources().getColor(R.color.color_secondary_shade));
                 return true;
             } catch (IOException e) {
                 e.printStackTrace();
                 return false;
             }
 
-        }
-        else {
+        } else {
             grantPermission();
             return false;
         }
@@ -255,17 +245,18 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
+
     private void handleRecording() {
-        if(!isRecording) isRecording = startRecording();
+        if (!isRecording) isRecording = startRecording();
         else isRecording = stopRecording();
 
-        mAnimationManager.recordAnimation(recButton,waveAnimation,micAnimation, isRecording);
+        mAnimationManager.recordAnimation(recButton, waveAnimation, micAnimation, isRecording);
     }
 
     private void handlePlaying() {
-        if(recPath == null && recUri == null)
+        if (recPath == null && recUri == null)
             Toast.makeText(this, "Please Record or Choose File First", Toast.LENGTH_LONG).show();
-        else{
+        else {
             if (!isPlaying) isPlaying = startPlaying();
             else isPlaying = stopPlaying();
 
@@ -277,8 +268,8 @@ public class MainActivity extends AppCompatActivity {
         mMediaPlayer = new MediaPlayer();
 
         try {
-            if(recPath != null) mMediaPlayer.setDataSource(recPath);
-            else mMediaPlayer.setDataSource(getApplicationContext(),recUri);
+            if (recPath != null) mMediaPlayer.setDataSource(recPath);
+            else mMediaPlayer.setDataSource(getApplicationContext(), recUri);
 
 
             mMediaPlayer.prepare();
@@ -294,11 +285,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void handleProgress() {
         progressBar.setVisibility(View.VISIBLE);
-        mTimer = new CountDownTimer(currentFileDuration * 1000,1000) {
+        mTimer = new CountDownTimer(currentFileDuration * 1000, 1000) {
             @Override
             public void onTick(long l) {
-                updateTimer(currentFileDuration - (int)Math.ceil(l/1000.0));
-                progressBar.setPercent(100 - (int)( Math.floor(l/10.0) / currentFileDuration));
+                updateTimer(currentFileDuration - (int) Math.ceil(l / 1000.0));
+                progressBar.setPercent(100 - (int) (Math.floor(l / 10.0) / currentFileDuration));
             }
 
             @Override
@@ -311,8 +302,8 @@ public class MainActivity extends AppCompatActivity {
         mTimer.start();
     }
 
-    private boolean stopPlaying(){
-        if(mMediaPlayer != null) {
+    private boolean stopPlaying() {
+        if (mMediaPlayer != null) {
             mMediaPlayer.stop();
             mMediaPlayer.release();
             return false;
@@ -320,25 +311,22 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    private void getFile(){
-        if(isPlaying)
+    private void getFile() {
+        if (isPlaying)
             Toast.makeText(this, "Please Stop The Current Playing Audio", Toast.LENGTH_LONG).show();
-        else{
+        else {
             recPath = null;
             if (ContextCompat.checkSelfPermission(this,
                     android.Manifest.permission.READ_MEDIA_AUDIO)
-                    != PackageManager.PERMISSION_GRANTED)
-            {
+                    != PackageManager.PERMISSION_GRANTED) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     ActivityCompat.requestPermissions(MainActivity.this,
-                            new String[] {Manifest.permission.READ_MEDIA_AUDIO },
+                            new String[]{Manifest.permission.READ_MEDIA_AUDIO},
                             2);
-                }
-                else ActivityCompat.requestPermissions(MainActivity.this,
-                        new String[] {Manifest.permission.READ_EXTERNAL_STORAGE },
+                } else ActivityCompat.requestPermissions(MainActivity.this,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                         2);
-            }
-            else {
+            } else {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("audio/*");
                 mResultLauncher.launch(intent);
@@ -351,26 +339,25 @@ public class MainActivity extends AppCompatActivity {
         boolean result = true;
         for (String permission : Permissions) {
             result = result && ContextCompat.checkSelfPermission(this,
-                    permission) == PackageManager.PERMISSION_GRANTED ;
+                    permission) == PackageManager.PERMISSION_GRANTED;
         }
-        return result ;
+        return result;
     }
 
-    private void grantPermission(){
+    private void grantPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            ActivityCompat.requestPermissions(MainActivity.this,new String[]{
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{
                     Manifest.permission.RECORD_AUDIO, Manifest.permission.READ_MEDIA_AUDIO
-            },1);
-        }
-        else{
-            ActivityCompat.requestPermissions(MainActivity.this,new String[]{
+            }, 1);
+        } else {
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{
                     Manifest.permission.RECORD_AUDIO, Manifest.permission.READ_EXTERNAL_STORAGE
-            },1);
+            }, 1);
         }
     }
 
     @SuppressLint("Range")
-    private String getNameFromUri(Uri uri){
+    private String getNameFromUri(Uri uri) {
         String fileName = "";
         Cursor cursor = null;
         cursor = getContentResolver().query(uri, new String[]{
@@ -386,94 +373,80 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateTimer(long minutes, long seconds) {
-        timer.setText(String.format(Locale.getDefault(),"%02d:%02d",minutes,seconds));
-        timerDark.setText(String.format(Locale.getDefault(),"%02d:%02d",minutes,seconds));
-        timerLight.setText(String.format(Locale.getDefault(),"%02d:%02d",minutes,seconds));
+        timer.setText(String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds));
+        timerDark.setText(String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds));
+        timerLight.setText(String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds));
     }
 
     private void updateTimer(long duration) {
         long seconds = duration % 60;
         long minutes = duration / 60;
-        timer.setText(String.format(Locale.getDefault(),"%02d:%02d",minutes,seconds));
-        timerDark.setText(String.format(Locale.getDefault(),"%02d:%02d",minutes,seconds));
-        timerLight.setText(String.format(Locale.getDefault(),"%02d:%02d",minutes,seconds));
+        timer.setText(String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds));
+        timerDark.setText(String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds));
+        timerLight.setText(String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds));
 
     }
 
-    private long getAudioDuration(){
+    private long getAudioDuration() {
         mMediaPlayer = new MediaPlayer();
-        try{
-            if(recPath != null) mMediaPlayer.setDataSource(recPath);
-            else mMediaPlayer.setDataSource(getApplicationContext(),recUri);
+        try {
+            if (recPath != null) mMediaPlayer.setDataSource(recPath);
+            else mMediaPlayer.setDataSource(getApplicationContext(), recUri);
             mMediaPlayer.prepare();
-            return mMediaPlayer.getDuration() /1000;
+            return mMediaPlayer.getDuration() / 1000;
         } catch (IOException e) {
             e.printStackTrace();
-        } finally{
+        } finally {
             mMediaPlayer.release();
         }
-        return  0;
+        return 0;
     }
 
+
     public static byte[] getBytes(Uri uri, Context c) throws IOException {
-        InputStream inputStream = null;
-        try {
-            inputStream = c.getContentResolver().openInputStream(uri);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } finally {
-            assert inputStream != null;
-            inputStream.close();
-        }
+        InputStream inputStream = c.getContentResolver().openInputStream(uri);
         ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
         int bufferSize = 1024;
         byte[] buffer = new byte[bufferSize];
 
         int len = 0;
-        while (true) {
-            try {
-                if ((len = inputStream.read(buffer)) == -1) break;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        while ((len = inputStream.read(buffer)) != -1) {
             byteBuffer.write(buffer, 0, len);
         }
         return byteBuffer.toByteArray();
     }
 
-    public void getPrediction()
-    {
+    public void getPrediction() {
+        AlertDialog dialog = showProgressbar(this, "Loading");
+        dialog.show();
         try {
-            File file = null ;
-            if (recPath == null)
-            {
+            File file = null;
+            if (recPath == null) {
                 String extension = "";
 
                 int i = recUri.getPath().lastIndexOf('.');
-                if (i > 0)
-                {
+                if (i > 0) {
                     extension = recUri.getPath().substring(i + 1);
                 }
-                file= new File(getApplicationContext().getCacheDir().getPath()+"tmp"+extension);
-                if(!file.exists()){
-                    Log.d("hi","kkk");
+                file = new File(getApplicationContext().getCacheDir().getPath() + "tmp" + extension);
+                if (!file.exists()) {
+                    Log.d("hi", "kkk");
                     file.createNewFile();
                 } else {
                     System.out.println("Exists");
                 }
                 FileOutputStream stream = new FileOutputStream(file.getPath());
-                stream.write(getBytes(recUri,this));
-            }
-            else {
-                file= new File(recPath);
+                stream.write(getBytes(recUri, this));
+            } else {
+                file = new File(recPath);
             }
 
 
-            RequestBody req = RequestBody.create(MediaType.parse("audio/mpeg"),file);
+            RequestBody req = RequestBody.create(MediaType.parse("audio/mpeg"), file);
             OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                    .connectTimeout(120, TimeUnit.SECONDS)
-                    .readTimeout(120, TimeUnit.SECONDS)
-                    .writeTimeout(120, TimeUnit.SECONDS)
+                    .connectTimeout(1200, TimeUnit.SECONDS)
+                    .readTimeout(1200, TimeUnit.SECONDS)
+                    .writeTimeout(1200, TimeUnit.SECONDS)
                     .build();
             MultipartBody.Part audio = MultipartBody.Part.createFormData("file", file.getName(), req);
             Retrofit retrofit = new Retrofit.Builder().baseUrl("https://mohamed41-medo.hf.space").client(okHttpClient).addConverterFactory(GsonConverterFactory.create()).build();
@@ -485,26 +458,36 @@ public class MainActivity extends AppCompatActivity {
                     if (response.isSuccessful()) {
                         // Handle success
                         Response resp = response.body();
+                        Intent intent = new Intent(MainActivity.this, ResultActivity.class);
+                        if (resp != null) {
+                            intent.putExtra("RESULT_EMOTION", resp.getPrediction());
+                            startActivity(intent);
+                            dialog.dismiss();
+                        }
+
                         Log.d("from Testing", resp.getPrediction());
                     } else {
                         Log.d("from Testing", "onResponse: code " + response.code());
                         try {
-                            Log.d("from Testing", "onResponse: error " + response.body() + " "+response.errorBody().string());
+                            Log.d("from Testing", "onResponse: error " + response.body() + " " + response.errorBody().string());
+                            Toast.makeText(MainActivity.this, response.code() +": "+ response.errorBody().string(), Toast.LENGTH_SHORT).show();
+
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
+                        dialog.dismiss();
                     }
                 }
 
                 @Override
                 public void onFailure(Call<Response> call, Throwable t) {
                     Log.d("from Testing", "onFailure: " + t.getMessage());
+                    dialog.dismiss();
                 }
             });
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
+            dialog.dismiss();
         }
     }
 

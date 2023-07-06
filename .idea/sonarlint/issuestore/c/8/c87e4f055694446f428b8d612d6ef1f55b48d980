@@ -1,0 +1,36 @@
+
+f
+java:S1192ø"JDefine a constant instead of duplicating this literal "%02d:%02d" 6 times.(´€ğíûÿÿÿÿ
+i
+java:S1192Ô"MDefine a constant instead of duplicating this literal "from Testing" 4 times.(•³Ù—ùÿÿÿÿ
+g	java:S117Ò"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ĞÂó
+^
+java:S2259Ô"BA "NullPointerException" could be thrown; "resp" is nullable here.(•³Ù—ùÿÿÿÿ
+`
+java:S2095—"IUse try-with-resources or close this "InputStream" in a "finally" clause.(•ĞéÄ
+j
+java:S2095¶"NUse try-with-resources or close this "FileOutputStream" in a "finally" clause.(Š„ìÒúÿÿÿÿ
+]
+java:S1659I"GDeclare "timerLight" and all following declarations on a separate line.(ÃË½œ
+;
+java:S1659S"%Declare "recName" on a separate line.(Ÿåã°
+t
+java:S1450E"YRemove the "backButton" field and declare it as a local variable in the relevant methods.(‚ÛØ¬şÿÿÿÿ
+t
+java:S1450D"YRemove the "infoButton" field and declare it as a local variable in the relevant methods.(À•†‰ùÿÿÿÿ
+k
+java:S1450^"URemove the "mTimer" field and declare it as a local variable in the relevant methods.(‰©ÑŠ
+F
+java:S1874®"/Remove this use of "Handler"; it is deprecated.(âôæË
+Q
+java:S1874Í"5Remove this use of "MediaRecorder"; it is deprecated.(î÷ÿçüÿÿÿÿ
+G
+java:S1874à"0Remove this use of "getColor"; it is deprecated.(×øıÈ
+h
+java:S3776£"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(õ©˜
+]	java:S899²"BDo something with the "boolean" value returned by "createNewFile".(Ğ’Íùÿÿÿÿ
+O	java:S106´"9Replace this use of System.out or System.err by a logger.(ÓĞ§Ü
+I
+java:S1068D".Remove this unused "infoButton" private field.(À•†‰ùÿÿÿÿ
+I
+java:S1068E".Remove this unused "backButton" private field.(‚ÛØ¬şÿÿÿÿ

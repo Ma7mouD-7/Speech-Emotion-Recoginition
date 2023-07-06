@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -41,6 +42,7 @@ public class ResultActivity extends AppCompatActivity {
         initDict();
         Intent intent = getIntent();
         emotion = intent.getStringExtra("RESULT_EMOTION");
+        Log.d("EMOOOOOOO", "initComponents: " + emotion);
 
         emotionTextView.setText(emotion);
         emotionLight.setText(emotion);
@@ -53,6 +55,7 @@ public class ResultActivity extends AppCompatActivity {
 
     private void initDict() {
         emoDict.put("Neutral",R.drawable.emo_neutral);
+        emoDict.put("Calm",R.drawable.emo_neutral);
         emoDict.put("Happy",R.drawable.emo_happy);
         emoDict.put("Sad",R.drawable.emo_sad);
         emoDict.put("Angry",R.drawable.emo_angry);
