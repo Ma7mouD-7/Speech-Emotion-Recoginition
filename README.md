@@ -19,13 +19,13 @@ Speech Emotion Recognition is GUI for Ai Model - built as a graduation project f
 
 You can record your speech (in mid-clear environment) the model would process your record to give you result as your dominant emotion from 7 emotions.
 
-* Neutral / Calm
-* Happy
-* Sad
-* Fear
-* Angry
-* Disgust
-* Surprise
+* Neutral / Calm 😐
+* Happy 😄
+* Sad 😢
+* Fear 😨
+* Angry 😠
+* Disgust 🤢
+* Surprise 😲
 
 
 ## Built With
@@ -57,5 +57,9 @@ You can record your speech (in mid-clear environment) the model would process yo
 
 ## Video
 <div align="center">
-<img src="https://i.imgur.com/gfKqd0P.mp4"/>
+  
+
+https://github.com/Ma7mouD-7/Speech-Emotion-Recoginition/assets/62570990/7b16d25e-9040-4d25-b334-ab540d3e4cae
+
+
 </div>
